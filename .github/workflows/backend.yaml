@@ -1,0 +1,48 @@
+name: Build and Deploy Backend
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build-push-update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend
+          push: true
+          tags: bokobo2026/app-stateful-flask:${{ github.sha }}
+
+      - name: Update Kubernetes deployment image
+        run: |
+          sed -i "s|^[[:space:]]*image: .*|          image: bokobo2026/app-stateful-flask:${GITHUB_SHA}|" k8s/backend/deployment.yaml
+
+      - name: Commit and push deployment update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add k8s/backend/deployment.yaml
+
+          if git diff --cached --quiet; then
+            echo "Aucune modification de l'image."
+          else
+            git commit -m "chore: update backend image to ${GITHUB_SHA} [skip ci]"
+            git push origin main
+          fi
