@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: mdianmareyah/app-stateful-flask:v0
+          image: bokobo2026/app-stateful-flask:196110a83421f2b18773e055b2ddd75489f26835
           ports:
             - containerPort: 5000
           env:
