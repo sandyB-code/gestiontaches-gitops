@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des tâches</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<main class="wrap">
+
+    <h1>Gestion des tâches</h1>
+
+    <p class="sub">
+        Frontend SPA — namespace <code>frontend</code>
+        → API <code>stateful-flask</code>
+    </p>
+
+    <div id="status" class="status"></div>
+
+    <form id="task-form">
+
+        <!-- ID caché utilisé pour la modification -->
+        <input
+            type="hidden"
+            id="task-id"
+        >
+
+        <input
+            type="text"
+            id="title"
+            placeholder="Titre"
+            required
+        >
+
+        <input
+            type="text"
+            id="description"
+            placeholder="Description (optionnel)"
+        >
+
+        <button
+            id="submit-btn"
+            type="submit"
+        >
+            Ajouter
+        </button>
+
+        <button
+            id="cancel-btn"
+            type="button"
+            class="ghost hidden"
+        >
+            Annuler
+        </button>
+
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Titre</th>
+                <th>Description</th>
+                <th>Pod</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody id="task-list">
+        </tbody>
+    </table>
+
+</main>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
+

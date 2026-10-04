@@ -1,4 +1,4 @@
-
+cat > k8s/backend/deployment.yaml <<'EOF'
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -21,7 +21,10 @@ spec:
             - containerPort: 5000
           env:
             - name: DATABASE_URI
-              value: "postgresql://stateful-flask-user:stateful-flask-password@postgres.postgres.svc.cluster.local:5432/stateful-flask-db"
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: DATABASE_URI
           resources:
             requests:
               cpu: "100m"
@@ -29,4 +32,4 @@ spec:
             limits:
               cpu: "500m"
               memory: "256Mi"
-
+EOF
