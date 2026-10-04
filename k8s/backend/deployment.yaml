@@ -1,4 +1,4 @@
-cat > k8s/backend/deployment.yaml <<'EOF'
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -32,4 +32,4 @@ spec:
             limits:
               cpu: "500m"
               memory: "256Mi"
-EOF
+
