@@ -1,4 +1,4 @@
-
+# Test du workflow GitOps automatique
 import os
 import socket
 
