@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: bokobo2026/frontend:v1
+          image: bokobo2026/frontend:4c0209da6e529df9e41fe50795f459f990be1dde
           imagePullPolicy: IfNotPresent
 
           ports:
