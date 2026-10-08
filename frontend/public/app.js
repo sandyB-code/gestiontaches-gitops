@@ -1,6 +1,7 @@
 
 // window.API_BASE_URL est injecté dans config.js au démarrage du conteneur
 // (voir docker-entrypoint.sh) : l'URL de l'API n'est jamais figée dans le build.
+
 const API_URL = `${window.API_BASE_URL}/tasks`;
 
 const form = document.getElementById("task-form");
@@ -12,6 +13,10 @@ const cancelBtn = document.getElementById("cancel-btn");
 const list = document.getElementById("task-list");
 const statusEl = document.getElementById("status");
 
+
+// ============================================================
+// Gestion du statut
+// ============================================================
 
 function setStatus(message, kind) {
     statusEl.textContent = message;
@@ -35,10 +40,16 @@ async function loadTasks() {
 
         const data = await res.json();
 
-        renderTasks(data.tasks);
+        const tasks = Array.isArray(data.tasks)
+            ? data.tasks
+            : [];
+
+        const pod = data.pod || "inconnu";
+
+        renderTasks(tasks, pod);
 
         setStatus(
-            `${data.tasks.length} tâche(s) — répondu par le pod ${data.pod}`,
+            `${tasks.length} tâche(s) — répondu par le pod ${pod}`,
             "ok"
         );
 
@@ -56,7 +67,7 @@ async function loadTasks() {
 // Affichage des tâches
 // ============================================================
 
-function renderTasks(tasks) {
+function renderTasks(tasks, pod) {
 
     list.innerHTML = "";
 
@@ -81,7 +92,9 @@ function renderTasks(tasks) {
         const tr = document.createElement("tr");
 
         tr.innerHTML = `
-            <td>${t.id}</td>
+            <td>
+                ${t.id}
+            </td>
 
             <td>
                 ${escapeHtml(t.title)}
@@ -92,7 +105,7 @@ function renderTasks(tasks) {
             </td>
 
             <td>
-                —
+                ${escapeHtml(pod || "—")}
             </td>
 
             <td class="actions">
@@ -127,7 +140,7 @@ function escapeHtml(str) {
 
     const div = document.createElement("div");
 
-    div.textContent = str;
+    div.textContent = String(str);
 
     return div.innerHTML;
 }
@@ -207,7 +220,7 @@ list.addEventListener("click", async (e) => {
 
 
     // --------------------------------------------------------
-    // DELETE
+    // DELETE /tasks/<id>
     // --------------------------------------------------------
 
     if (e.target.classList.contains("delete")) {
@@ -246,7 +259,7 @@ list.addEventListener("click", async (e) => {
 
 
     // --------------------------------------------------------
-    // EDIT
+    // GET /tasks/<id>
     // --------------------------------------------------------
 
     if (e.target.classList.contains("edit")) {
@@ -295,7 +308,7 @@ list.addEventListener("click", async (e) => {
 
 
 // ============================================================
-// Annuler
+// Annuler la modification
 // ============================================================
 
 cancelBtn.addEventListener(
