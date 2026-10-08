@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: bokobo2026/backend:2b70390ab1b470f3c75313cb3e4636ffd0859eea
+          image: bokobo2026/backend:8f08b6752951afb8077017d2afbefa21d7b1b59e
           ports:
             - containerPort: 5000
           env:
