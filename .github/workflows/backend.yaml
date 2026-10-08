@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "backend/**"
+      - "k8s/backend/**"
+      - ".github/workflows/backend.yaml"
 
 permissions:
   contents: write
